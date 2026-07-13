@@ -1,6 +1,7 @@
 package com.sudarshan.kumar.sb_poc_2.service;
 
 import com.sudarshan.kumar.sb_poc_2.repositories.SupplierRepository;
+import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
 import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 
 import java.util.List;
@@ -20,13 +21,28 @@ public class SupplierService {
         return supplierRepository.findAll();
     }
 
-    //Get Supplier by Id
+    public Supplier getSupplierById(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+    }
 
-    //Get Supplier by Name
+    public Supplier createSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
 
-    //Create Supplier
+    public Supplier updateSupplier(Long id, Supplier updatedSupplier) {
+        Supplier currSupplier = getSupplierById(id);
 
-    //Remove Supplier
+        currSupplier.setName(updatedSupplier.getName());
+        currSupplier.setEmail(updatedSupplier.getEmail());
+
+        return supplierRepository.save(currSupplier);
+    }
+
+    public void deleteOrder(Long id) {
+        Supplier supplier = getSupplierById(id);
+        supplierRepository.delete(supplier);
+    }
 
 
 }
