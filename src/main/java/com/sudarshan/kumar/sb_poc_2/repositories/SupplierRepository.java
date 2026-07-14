@@ -15,4 +15,8 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     Optional<Supplier> findByAccountManager(String accountManager);
 
     Optional<Supplier> findByPointOfContact(String pointOfContact);
+
+    boolean existsByName(String name);
+
+    boolean existsByEmail(String email);
 }

@@ -1,11 +1,12 @@
 package com.sudarshan.kumar.sb_poc_2.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.sudarshan.kumar.sb_poc_2.repositories.CustomerRepository;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
 import com.sudarshan.kumar.sb_poc_2.models.Customer;
-import java.util.List;
+import com.sudarshan.kumar.sb_poc_2.repositories.CustomerRepository;
 
 @Service
 public class CustomerService {
@@ -22,7 +23,21 @@ public class CustomerService {
 
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
+    }
+
+    public List<Customer> getCustomersByName(String name) {
+        List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name);
+
+        if (customers.isEmpty()) {
+            throw new ResourceNotFoundException("Customer", name);
+        }
+        return customers;
+    }
+
+    public Customer getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", email));
     }
 
     public Customer createCustomer(Customer customer) {

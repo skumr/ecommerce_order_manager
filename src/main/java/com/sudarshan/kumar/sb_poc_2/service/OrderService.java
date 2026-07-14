@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.sudarshan.kumar.sb_poc_2.repositories.OrderRepository;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
+import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.models.Order;
+import com.sudarshan.kumar.sb_poc_2.repositories.OrderRepository;
 
 @Service
 public class OrderService {
@@ -24,6 +25,15 @@ public class OrderService {
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+    }
+
+    public List<Order> getOrdersByCustomer(Customer customer) {
+        List<Order> orders = orderRepository.findByCustomer(customer);
+
+        if (orders.isEmpty()) {
+            throw new ResourceNotFoundException("Order", customer);
+        }
+        return orders;
     }
 
     public Order createOrder(Order order) {
