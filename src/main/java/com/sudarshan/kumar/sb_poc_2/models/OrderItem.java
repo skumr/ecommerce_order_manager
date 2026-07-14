@@ -10,9 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="item_orders")
+@NoArgsConstructor
+@Getter
 public class OrderItem {
 
     @Id
@@ -31,52 +35,26 @@ public class OrderItem {
     private int quantity;
     private BigDecimal unitPrice;
 
-    public OrderItem() {}
-
     public OrderItem(Product product, int quantity, BigDecimal unitPrice) {
         this.product = product;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public long getId() {
-        return this.id;
-    }
-
-    public Order getOrder() {
-        return this.order;
-    }
-
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public Product getProduct() {
-        return this.product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
-    public String getProductName() {
-        return this.productName;
-    }
-
     public void setProductName(String productName) {
         this.productName = productName;
     }
 
-    public int getQuantity() {
-        return this.quantity;
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return this.unitPrice;
     }
 
     public void setUnitPrice(BigDecimal unitPrice) {

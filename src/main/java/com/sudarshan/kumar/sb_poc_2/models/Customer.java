@@ -13,9 +13,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="customers")
+@NoArgsConstructor
+@Getter
 public class Customer {
 
     @Id
@@ -44,30 +48,12 @@ public class Customer {
     )
     private List<Order> orders = new ArrayList<>();
 
-    public Customer() {}
-
     public Customer(
         String name, 
         String email 
     ) {
         this.name = name;
         this.email = email;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public List<CustomerAddress> getAddresses() {
-        return this.addresses;
     }
 
     public void setName(String name) {
@@ -86,5 +72,13 @@ public class Customer {
     public void addOrder(Order order) {
         orders.add(order);
         order.setCustomer(this);
+    }
+
+    public void setAddresses(List<CustomerAddress> addresses) {
+        this.addresses = addresses;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

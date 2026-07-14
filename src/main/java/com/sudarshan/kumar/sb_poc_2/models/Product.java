@@ -13,9 +13,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "products")
+@NoArgsConstructor
+@Getter
 public class Product {
 
     @Id
@@ -35,33 +39,10 @@ public class Product {
     @Min(0)
     private int quantity;
 
-    public Product() {
-    }
-
     public Product(String name, int quantity, BigDecimal price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 
     public void setName(String name) {

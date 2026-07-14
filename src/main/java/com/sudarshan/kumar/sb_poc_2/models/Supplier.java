@@ -13,9 +13,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "suppliers")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Supplier {
 
     @Id
@@ -47,41 +52,11 @@ public class Supplier {
                orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
-    public Supplier() { }
-
     public Supplier(String name, String email, String accountManager, String pointOfContact) {
         this.name = name;
         this.email = email;
         this.accountManager = accountManager;
         this.pointofContact = pointOfContact;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getAccountManager() {
-        return this.accountManager;
-    }
-
-    public String getPointOfContact() {
-        return this.pointofContact;
-    }
-
-    public List<SupplierAddress> getAddresses() {
-        return addresses;
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 
     public void setName(String name) {
@@ -110,5 +85,13 @@ public class Supplier {
     public void removeProduct(Product product) {
         products.remove(product);
         product.setSupplier(this);
+    }
+
+    public void setAddresses(List<SupplierAddress> addresses) {
+        this.addresses = addresses;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

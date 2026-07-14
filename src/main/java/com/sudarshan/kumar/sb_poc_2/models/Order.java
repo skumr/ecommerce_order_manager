@@ -15,9 +15,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="orders")
+@NoArgsConstructor
+@Getter
 public class Order {
 
     @Id
@@ -43,31 +47,13 @@ public class Order {
     )
     private Shipment shipment;
 
-    public Order() {}
-
-    public Long getId() {
-        return this.id;
-    }
-    
-    public List<OrderItem> getOrderItems() {
-        return this.orderItems;
-    }
-
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
-    public Customer getCustomer() {
-        return this.customer;
-    }
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public Shipment getShipment() {
-        return this.shipment;
     }
 
     public void setShipment(Shipment shipment) {
@@ -75,5 +61,9 @@ public class Order {
         if (shipment != null) {
             shipment.setOrder(this);
         }
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }
