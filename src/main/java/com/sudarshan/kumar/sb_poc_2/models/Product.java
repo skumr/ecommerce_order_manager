@@ -1,5 +1,7 @@
 package com.sudarshan.kumar.sb_poc_2.models;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +30,7 @@ public class Product {
     private Supplier supplier;
 
     @DecimalMin("0.0")
-    private double price;
+    private BigDecimal price;
 
     @Min(0)
     private int quantity;
@@ -36,7 +38,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, int quantity, double price) {
+    public Product(String name, int quantity, BigDecimal price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -58,7 +60,7 @@ public class Product {
         return quantity;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -74,7 +76,7 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }
