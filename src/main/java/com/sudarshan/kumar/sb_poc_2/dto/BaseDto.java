@@ -1,4 +1,4 @@
-package com.sudarshan.kumar.sb_poc_2.models;
+package com.sudarshan.kumar.sb_poc_2.dto;
 
 import java.time.LocalDateTime;
 
@@ -10,34 +10,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
-@MappedSuperclass
+@Data
+@SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
 @SoftDelete(strategy=SoftDeleteType.DELETED)
-@Getter
-@Setter
-@ToString(onlyExplicitlyIncluded = true)
-public abstract class BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+public class BaseDto {
 
     @CreatedDate
-    @ToString.Include
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @ToString.Include
     @Column(name = "modified_at", nullable = false, updatable = false)
     private LocalDateTime modifiedAt;
 }
-
