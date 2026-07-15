@@ -17,12 +17,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="orders")
 @NoArgsConstructor
 @Getter
-public class Order {
+@Setter
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -50,20 +52,5 @@ public class Order {
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public void setShipment(Shipment shipment) {
-        this.shipment = shipment;
-        if (shipment != null) {
-            shipment.setOrder(this);
-        }
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
     }
 }

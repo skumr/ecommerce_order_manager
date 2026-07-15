@@ -1,0 +1,35 @@
+package com.sudarshan.kumar.sb_poc_2.models;
+
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+@SoftDelete(strategy=SoftDeleteType.DELETED)
+@Getter
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+public abstract class BaseEntity {
+
+    @CreatedDate
+    @ToString.Include
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @ToString.Include
+    @Column(name = "modified_at", nullable = false, updatable = false)
+    private LocalDateTime modifiedAt;
+}

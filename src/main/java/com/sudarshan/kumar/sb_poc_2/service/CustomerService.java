@@ -10,7 +10,7 @@ import com.sudarshan.kumar.sb_poc_2.repositories.CustomerRepository;
 
 @Service
 public class CustomerService {
-
+    
     private final CustomerRepository customerRepository;
 
     public CustomerService(CustomerRepository customerRepository) {

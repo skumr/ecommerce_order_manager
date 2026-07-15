@@ -13,62 +13,63 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "suppliers")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name="suppliers")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class Supplier {
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+public class Supplier extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
+    @ToString.Include
     private String name;
 
     @NotBlank
+    @ToString.Include
     @Email
     private String email;
 
     @NotBlank
+    @ToString.Include
     private String accountManager;
 
     @NotBlank
+    @ToString.Include
     private String pointofContact;
 
     @NotNull
+    @ToString.Include
     @OneToMany(mappedBy = "supplier",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     private List<SupplierAddress> addresses = new ArrayList<>();
 
     @NotNull
+    @ToString.Include
     @OneToMany(mappedBy = "supplier",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
-    public Supplier(String name, String email, String accountManager, String pointOfContact) {
-        this.name = name;
-        this.email = email;
-        this.accountManager = accountManager;
-        this.pointofContact = pointOfContact;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void addAddress(SupplierAddress address) {
         addresses.add(address);
+        address.setSupplier(this);
+    }
+
+    public void removeAddress(SupplierAddress address) {
+        addresses.remove(address);
         address.setSupplier(this);
     }
 
@@ -77,21 +78,8 @@ public class Supplier {
         product.setSupplier(this);
     }
 
-    public void removeAddress(SupplierAddress address) {
-        addresses.remove(address);
-        address.setSupplier(this);
-    }
-
     public void removeProduct(Product product) {
         products.remove(product);
         product.setSupplier(this);
-    }
-
-    public void setAddresses(List<SupplierAddress> addresses) {
-        this.addresses = addresses;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 }

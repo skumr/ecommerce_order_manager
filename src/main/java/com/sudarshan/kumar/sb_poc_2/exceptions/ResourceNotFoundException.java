@@ -18,6 +18,6 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     public ResourceNotFoundException(String resource, Customer customer) {
-        super(resource + " not found with supplier: " + customer.getName());
+        super(resource + " not found with customer: " + customer.getName());
     }
 }

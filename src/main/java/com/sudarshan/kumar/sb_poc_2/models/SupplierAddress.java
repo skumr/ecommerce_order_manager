@@ -7,12 +7,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class SupplierAddress extends BaseAddress {
 
     @Id
@@ -22,9 +26,4 @@ public class SupplierAddress extends BaseAddress {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-    
 }

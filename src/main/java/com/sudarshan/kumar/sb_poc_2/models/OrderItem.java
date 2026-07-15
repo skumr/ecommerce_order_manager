@@ -10,14 +10,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="item_orders")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class OrderItem {
+@Setter
+public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -31,33 +38,14 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @NotBlank
     private String productName;
+
+    @NotNull
+    @Min(0)
     private int quantity;
+
+    @NotNull
+    @Min(0)
     private BigDecimal unitPrice;
-
-    public OrderItem(Product product, int quantity, BigDecimal unitPrice) {
-        this.product = product;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
 }

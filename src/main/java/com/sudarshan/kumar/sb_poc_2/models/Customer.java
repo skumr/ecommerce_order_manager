@@ -13,27 +13,36 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name="customers")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class Customer {
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     @NotBlank
+    @ToString.Include
     private String name;
 
     @NotBlank
     @Email
+    @ToString.Include
     private String email;
 
     @NotNull
+    @ToString.Include
     @OneToMany(
         mappedBy="customer", 
         cascade=CascadeType.ALL, 
@@ -41,28 +50,13 @@ public class Customer {
     )
     private List<CustomerAddress> addresses = new ArrayList<>();
 
+    @ToString.Include
     @OneToMany(
         mappedBy="customer",
         cascade=CascadeType.ALL,
         orphanRemoval=true
     )
     private List<Order> orders = new ArrayList<>();
-
-    public Customer(
-        String name, 
-        String email 
-    ) {
-        this.name = name;
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public void addAddress(CustomerAddress address) {
         addresses.add(address);
@@ -72,13 +66,5 @@ public class Customer {
     public void addOrder(Order order) {
         orders.add(order);
         order.setCustomer(this);
-    }
-
-    public void setAddresses(List<CustomerAddress> addresses) {
-        this.addresses = addresses;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 }

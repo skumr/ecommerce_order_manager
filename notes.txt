@@ -1,0 +1,30 @@
+Notes:
+
+- Separate to utilty classes - modelmapper - genericconverter
+
+- Validiton must occur in DTO
+
+- Audit framework by JPA 
+
+- created_at, modified_at, deleted flag annotations for audit history ✅
+
+- see where to use @Transactional in service classes -- for modification operations
+- Transaction should be properly handled
+
+- DTO/Bean Validation -- jackson lib -- @Validation, @Valid
+
+- Controller should handle Validation as it recieves DTO
+
+- Card functionality -- Filtered Response
+
+- List of items based on filtering must be paginated response
+
+- Creating controller specific exc handlers ex. Internal Data Inconsistency vs.
+
+- Protecting data from exc messages -- return status code instead
+
+Main Changes
+
+- Add DTOs, Validation, Annotations, behaviour checks, response structure
+- ModelMapper, GenericConverter -- provided by spring
+- Paginated 

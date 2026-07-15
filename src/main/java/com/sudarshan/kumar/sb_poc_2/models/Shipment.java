@@ -7,14 +7,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="order_shipments")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class Shipment {
+@Setter
+public class Shipment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -26,32 +31,12 @@ public class Shipment {
     
     @OneToOne
     @JoinColumn(name = "shipment_address_id")
+    @NotBlank
     private ShipmentAddress shipmentAddress;
 
+    @NotBlank
     private String trackingNumber;
-
+    
+    @NotBlank
     private String shipmentStatus;
-
-    public Shipment(Order order, ShipmentAddress shipmentAddress, String trackingNumber, String shipmentStatus) {
-        this.order = order;
-        this.shipmentAddress = shipmentAddress;
-        this.shipmentStatus = shipmentStatus;
-        this.trackingNumber = trackingNumber;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setShipmentAddress(ShipmentAddress shipmentAddress) {
-        this.shipmentAddress = shipmentAddress;
-    }
-
-    public void setShipmentStatus(String status) {
-        this.shipmentStatus = status;
-    }
-
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
-    }
 }
