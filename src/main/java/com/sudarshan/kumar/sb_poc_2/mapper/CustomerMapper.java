@@ -3,7 +3,7 @@ package com.sudarshan.kumar.sb_poc_2.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.sudarshan.kumar.sb_poc_2.dto.CustomerAddressDto;
+import com.sudarshan.kumar.sb_poc_2.dto.AddressDto;
 import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
 import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.models.CustomerAddress;
@@ -15,11 +15,11 @@ public interface CustomerMapper {
     CustomerDto toDto(Customer customer);
 
     @Mapping(target = "customer", ignore = true)
-    CustomerAddressDto toDto(CustomerAddress address);
+    AddressDto toDto(CustomerAddress address);
 
     @Mapping(target = "addresses", source = "addresses")
     Customer toEntity(CustomerDto customerDto);
 
     @Mapping(target = "customer", ignore = true)
-    CustomerAddress toEntity(CustomerAddressDto dto);
+    CustomerAddress toEntity(AddressDto dto);
 }
