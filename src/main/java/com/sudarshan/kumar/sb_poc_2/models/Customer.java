@@ -3,13 +3,18 @@ package com.sudarshan.kumar.sb_poc_2.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +22,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="customers")
+@Table(name = "customers")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString(onlyExplicitlyIncluded = true)
+@SoftDelete(strategy = SoftDeleteType.DELETED)
 public class Customer extends BaseEntity {
 
     @NotBlank
@@ -34,20 +40,20 @@ public class Customer extends BaseEntity {
     @ToString.Include
     private String email;
 
-    @NotNull
-    @ToString.Include
     @OneToMany(
-        mappedBy="customer", 
-        cascade=CascadeType.ALL, 
-        orphanRemoval=true
+        mappedBy = "customer",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
+    @JsonManagedReference
     private List<CustomerAddress> addresses = new ArrayList<>();
 
-    @ToString.Include
     @OneToMany(
-        mappedBy="customer",
-        cascade=CascadeType.ALL,
-        orphanRemoval=true
+        mappedBy = "customer",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
     private List<Order> orders = new ArrayList<>();
 

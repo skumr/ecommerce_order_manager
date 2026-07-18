@@ -2,8 +2,6 @@ package com.sudarshan.kumar.sb_poc_2.models;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.SoftDelete;
-import org.hibernate.annotations.SoftDeleteType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,7 +18,6 @@ import lombok.ToString;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@SoftDelete(strategy=SoftDeleteType.DELETED)
 @Getter
 @Setter
 @ToString(onlyExplicitlyIncluded = true)

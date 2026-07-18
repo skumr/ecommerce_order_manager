@@ -3,13 +3,16 @@ package com.sudarshan.kumar.sb_poc_2.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +20,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="suppliers")
+@Table(name = "suppliers")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString(onlyExplicitlyIncluded = true)
+@SoftDelete(strategy = SoftDeleteType.DELETED)
 public class Supplier extends BaseEntity {
 
     @NotBlank
@@ -30,8 +34,8 @@ public class Supplier extends BaseEntity {
     private String name;
 
     @NotBlank
-    @ToString.Include
     @Email
+    @ToString.Include
     private String email;
 
     @NotBlank
@@ -40,20 +44,24 @@ public class Supplier extends BaseEntity {
 
     @NotBlank
     @ToString.Include
-    private String pointofContact;
+    private String pointOfContact;
 
-    @NotNull
+    @OneToMany(
+        mappedBy = "supplier",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     @ToString.Include
-    @OneToMany(mappedBy = "supplier",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
     private List<SupplierAddress> addresses = new ArrayList<>();
 
-    @NotNull
+    @OneToMany(
+        mappedBy = "supplier",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     @ToString.Include
-    @OneToMany(mappedBy = "supplier",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     public void addAddress(SupplierAddress address) {

@@ -7,9 +7,16 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-public abstract class BaseDto {
-    
+public class AddressDto {
+
     private Long id;
+    private String unit;
+    private String street;
+    private String city;
+    private String province;
+    private String country;
+    private String postalCode;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    
 }

@@ -1,17 +1,19 @@
 package com.sudarshan.kumar.sb_poc_2.dto;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper=true)
-public class CustomerDto extends BaseDto {
+public class ProductDto extends BaseDto {
 
     private String name;
-    private String email;
-    private List<AddressDto> addresses;
+    private SupplierDto supplier;
+    private BigDecimal price;
+    private Integer quantity;
+    
 }

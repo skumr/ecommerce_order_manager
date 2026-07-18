@@ -31,7 +31,7 @@ public class Product extends BaseEntity {
     private Supplier supplier;
 
     @NotNull
-    @DecimalMin("0.0")
+    @DecimalMin(value = "0.0", inclusive = true)
     private BigDecimal price;
 
     @NotNull

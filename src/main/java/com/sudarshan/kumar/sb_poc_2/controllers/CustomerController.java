@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sudarshan.kumar.sb_poc_2.models.Customer;
+import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
 import com.sudarshan.kumar.sb_poc_2.service.CustomerService;
-
 
 @RestController
 @RequestMapping("/api/customers")
@@ -28,43 +28,52 @@ public class CustomerController {
     }
 
     @GetMapping("/all")
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id) {
+    public CustomerDto getCustomerById(
+            @PathVariable Long id
+    ) {
         return customerService.getCustomerById(id);
     }
 
-    @GetMapping("/search")
-    public List<Customer> getCustomersByName(@PathVariable String name) {
+    @GetMapping("/search/{name}")
+    public List<CustomerDto> getCustomersByName(
+            @PathVariable String name
+    ) {
         return customerService.getCustomersByName(name);
     }
 
-    @GetMapping("/search")
-    public Customer getCustomerByEmail(@PathVariable String email) {
+    @GetMapping("/email")
+    public CustomerDto getCustomerByEmail(
+            @RequestParam String email
+    ) {
         return customerService.getCustomerByEmail(email);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
+    public CustomerDto createCustomer(
+            @RequestBody CustomerDto customerDto
+    ) {
+        return customerService.createCustomer(customerDto);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Customer updateCustomer(
-        @PathVariable Long id,
-        @RequestBody Customer customer
+    public CustomerDto updateCustomer(
+            @PathVariable Long id,
+            @RequestBody CustomerDto customerDto
     ) {
-        return customerService.updateCustomer(id, customer);
+        return customerService.updateCustomer(id, customerDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomer(@PathVariable Long id) {
+    public void deleteCustomer(
+            @PathVariable Long id
+    ) {
         customerService.deleteCustomer(id);
     }
 }
