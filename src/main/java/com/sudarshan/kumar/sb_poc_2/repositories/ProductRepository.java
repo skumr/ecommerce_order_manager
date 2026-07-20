@@ -11,7 +11,7 @@ import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findByName(String name);
+    Optional<Product> findByNameIgnoreCase(String name);
 
     List<Product> findBySupplier(Supplier supplier);
 
@@ -25,7 +25,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByQuantityGreaterThan(int quantity);
 
-    List<Product> findBySupplierAndQuantityGreaterThan(Supplier supplier, int quantity);
+    List<Product> findBySupplierAndQuantityGreaterThan(
+            Supplier supplier,
+            int quantity
+    );
 
     List<Product> findByNameContainingIgnoreCase(String keyword);
 
@@ -37,5 +40,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByOrderByQuantityDesc();
 
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 }

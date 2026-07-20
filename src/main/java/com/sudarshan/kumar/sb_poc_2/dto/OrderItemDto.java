@@ -9,10 +9,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper=true)
-public class ProductDto extends BaseDto {
+public class OrderItemDto extends BaseDto {
 
-    private String name;
-    private SupplierDto supplier;
-    private BigDecimal price;
+    private OrderDto order;
+    private ProductDto product;
+    private String productName;
     private Integer quantity;
+    private BigDecimal unitPrice;
 }

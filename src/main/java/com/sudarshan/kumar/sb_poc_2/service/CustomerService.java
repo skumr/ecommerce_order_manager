@@ -12,6 +12,7 @@ import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.repositories.CustomerRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -25,8 +26,6 @@ public class CustomerService {
         this.customerMapper = customerMapper;
     }
 
-
-    @Transactional(readOnly = true)
     public List<CustomerDto> getAllCustomers() {
 
         return customerRepository.findAll()
@@ -35,20 +34,10 @@ public class CustomerService {
                 .toList();
     }
 
-
-    @Transactional(readOnly = true)
     public CustomerDto getCustomerById(Long id) {
-
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Customer", id.toString())
-                );
-
-        return customerMapper.toDto(customer);
+        return customerMapper.toDto(getCustomer(id));
     }
 
-
-    @Transactional(readOnly = true)
     public List<CustomerDto> getCustomersByName(String name) {
 
         List<Customer> customers =
@@ -63,61 +52,47 @@ public class CustomerService {
                 .toList();
     }
 
-
-    @Transactional(readOnly = true)
     public CustomerDto getCustomerByEmail(String email) {
 
         Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Customer", email)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", email));
 
         return customerMapper.toDto(customer);
     }
-
 
     @Transactional
     public CustomerDto createCustomer(CustomerDto customerDto) {
 
         Customer customer = customerMapper.toEntity(customerDto);
 
-        customer.getAddresses()
-                .forEach(address -> address.setCustomer(customer));
-
         Customer savedCustomer = customerRepository.save(customer);
 
         return customerMapper.toDto(savedCustomer);
     }
 
-
-    @Transactional()
+    @Transactional
     public CustomerDto updateCustomer(
             Long id,
             CustomerDto updatedCustomerDto
     ) {
 
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Customer", id.toString())
-                );
+        Customer customer = getCustomer(id);
 
         customer.setName(updatedCustomerDto.getName());
         customer.setEmail(updatedCustomerDto.getEmail());
 
-        Customer updatedCustomer = customerRepository.save(customer);
-
-        return customerMapper.toDto(updatedCustomer);
+        return customerMapper.toDto(customer);
     }
-
 
     @Transactional
     public void deleteCustomer(Long id) {
 
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Customer", id.toString())
-                );
+        customerRepository.delete(getCustomer(id));
+    }
 
-        customerRepository.delete(customer);
+    private Customer getCustomer(Long id) {
+
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }
 }

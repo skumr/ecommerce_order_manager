@@ -6,141 +6,256 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sudarshan.kumar.sb_poc_2.dto.ProductDto;
 import com.sudarshan.kumar.sb_poc_2.exceptions.InsufficientResourceException;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
+import com.sudarshan.kumar.sb_poc_2.mapper.ProductMapper;
 import com.sudarshan.kumar.sb_poc_2.models.Product;
 import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 import com.sudarshan.kumar.sb_poc_2.repositories.ProductRepository;
+import com.sudarshan.kumar.sb_poc_2.repositories.SupplierRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final SupplierRepository supplierRepository;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(
+            ProductRepository productRepository,
+            SupplierRepository supplierRepository,
+            ProductMapper productMapper
+    ) {
         this.productRepository = productRepository;
+        this.supplierRepository = supplierRepository;
+        this.productMapper = productMapper;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+
+    public List<ProductDto> getAllProducts() {
+
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+
+    public ProductDto getProductById(Long id) {
+
+        return productMapper.toDto(getProduct(id));
     }
 
-    public Product getProductByName(String name) {
-        return productRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", name));
+
+    public ProductDto getProductByName(String name) {
+
+        Product product = productRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product", name));
+
+        return productMapper.toDto(product);
     }
 
-    public List<Product> getProductsBySupplier(Supplier supplier) {
-        List<Product> products = productRepository.findBySupplier(supplier);
+
+    public List<ProductDto> getProductsBySupplier(Supplier supplier) {
+
+        List<Product> products =
+                productRepository.findBySupplier(supplier);
 
         if (products.isEmpty()) {
             throw new ResourceNotFoundException("Products", supplier);
         }
 
-        return products;
+        return products.stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getProductsAbovePrice(BigDecimal price) {
-        return productRepository.findByPriceGreaterThan(price);
+
+    public List<ProductDto> getProductsAbovePrice(BigDecimal price) {
+
+        return productRepository.findByPriceGreaterThan(price)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getProductsBelowPrice(BigDecimal price) {
-        return productRepository.findByPriceLessThan(price);
+
+    public List<ProductDto> getProductsBelowPrice(BigDecimal price) {
+
+        return productRepository.findByPriceLessThan(price)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getProductsWithinPriceRange(
+
+    public List<ProductDto> getProductsWithinPriceRange(
             BigDecimal minPrice,
             BigDecimal maxPrice) {
 
-        return productRepository.findByPriceBetween(minPrice, maxPrice);
+        return productRepository.findByPriceBetween(minPrice, maxPrice)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getLowStockProducts(int threshold) {
-        return productRepository.findByQuantityLessThan(threshold);
+
+    public List<ProductDto> getLowStockProducts(int threshold) {
+
+        return productRepository.findByQuantityLessThan(threshold)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getProductsInStock(int minimumQuantity) {
-        return productRepository.findByQuantityGreaterThan(minimumQuantity);
+
+    public List<ProductDto> getProductsInStock(int minimumQuantity) {
+
+        return productRepository.findByQuantityGreaterThan(minimumQuantity)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> getSupplierInventory(
+
+    public List<ProductDto> getSupplierInventory(
             Supplier supplier,
             int minimumQuantity) {
 
         return productRepository.findBySupplierAndQuantityGreaterThan(
-                supplier,
-                minimumQuantity);
+                    supplier,
+                    minimumQuantity)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public List<Product> searchProducts(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword);
-    }
 
-    public List<Product> getProductsStartingWith(String prefix) {
-        return productRepository.findByNameStartingWithIgnoreCase(prefix);
-    }
+    public List<ProductDto> searchProducts(String keyword) {
 
-    public List<Product> getProductsByLowestPrice() {
-        return productRepository.findByOrderByPriceAsc();
-    }
+        List<Product> products =
+                productRepository.findByNameContainingIgnoreCase(keyword);
 
-    public List<Product> getProductsByHighestPrice() {
-        return productRepository.findByOrderByPriceDesc();
-    }
-
-    public List<Product> getProductsByInventory() {
-        return productRepository.findByOrderByQuantityDesc();
-    }
-
-    @Transactional
-    public Product createProduct(Product product) {
-
-        if (productRepository.existsByName(product.getName())) {
-            throw new IllegalArgumentException(
-                    "A product with the name '" + product.getName() + "' already exists.");
+        if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Products", keyword);
         }
 
-        return productRepository.save(product);
+        return products.stream()
+                .map(productMapper::toDto)
+                .toList();
     }
+
+
+    public List<ProductDto> getProductsStartingWith(String prefix) {
+
+        return productRepository.findByNameStartingWithIgnoreCase(prefix)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+
+    public List<ProductDto> getProductsByLowestPrice() {
+
+        return productRepository.findByOrderByPriceAsc()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+
+    public List<ProductDto> getProductsByHighestPrice() {
+
+        return productRepository.findByOrderByPriceDesc()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+
+    public List<ProductDto> getProductsByInventory() {
+
+        return productRepository.findByOrderByQuantityDesc()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
 
     @Transactional
-    public Product updateProduct(Long id, Product updatedProduct) {
+    public ProductDto createProduct(ProductDto productDto) {
 
-        Product currentProduct = getProductById(id);
+        if (productRepository.existsByNameIgnoreCase(productDto.getName())) {
+            throw new IllegalArgumentException(
+                    "A product with the name '" +
+                    productDto.getName() +
+                    "' already exists.");
+        }
 
-        currentProduct.setName(updatedProduct.getName());
-        currentProduct.setPrice(updatedProduct.getPrice());
-        currentProduct.setQuantity(updatedProduct.getQuantity());
-        currentProduct.setSupplier(updatedProduct.getSupplier());
+        Product product = productMapper.toEntity(productDto);
 
-        return productRepository.save(currentProduct);
+        if (productDto.getSupplier() != null) {
+
+            Supplier supplier = getSupplier(
+                    productDto.getSupplier().getId()
+            );
+
+            product.setSupplier(supplier);
+        }
+
+        Product savedProduct = productRepository.save(product);
+
+        return productMapper.toDto(savedProduct);
     }
+
+
+    @Transactional
+    public ProductDto updateProduct(
+            Long id,
+            ProductDto updatedProductDto) {
+
+        Product product = getProduct(id);
+
+        product.setName(updatedProductDto.getName());
+        product.setPrice(updatedProductDto.getPrice());
+        product.setQuantity(updatedProductDto.getQuantity());
+
+        if (updatedProductDto.getSupplier() != null) {
+
+            Supplier supplier = getSupplier(
+                    updatedProductDto.getSupplier().getId()
+            );
+
+            product.setSupplier(supplier);
+        }
+
+        return productMapper.toDto(product);
+    }
+
 
     @Transactional
     public void deleteProduct(Long id) {
-        Product product = getProductById(id);
-        productRepository.delete(product);
+
+        productRepository.delete(getProduct(id));
     }
+
 
     @Transactional
     public void changePrice(Long id, BigDecimal newPrice) {
 
         if (newPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Price cannot be negative.");
+            throw new IllegalArgumentException(
+                    "Price cannot be negative.");
         }
 
-        Product product = getProductById(id);
+        Product product = getProduct(id);
 
         product.setPrice(newPrice);
-
-        productRepository.save(product);
     }
+
 
     @Transactional
     public void reduceInventory(Long id, int quantity) {
@@ -150,7 +265,7 @@ public class ProductService {
                     "Quantity must be greater than zero.");
         }
 
-        Product product = getProductById(id);
+        Product product = getProduct(id);
 
         if (product.getQuantity() < quantity) {
             throw new InsufficientResourceException(
@@ -160,9 +275,8 @@ public class ProductService {
         }
 
         product.setQuantity(product.getQuantity() - quantity);
-
-        productRepository.save(product);
     }
+
 
     @Transactional
     public void increaseInventory(Long id, int quantity) {
@@ -172,10 +286,24 @@ public class ProductService {
                     "Quantity must be greater than zero.");
         }
 
-        Product product = getProductById(id);
+        Product product = getProduct(id);
 
         product.setQuantity(product.getQuantity() + quantity);
+    }
 
-        productRepository.save(product);
+
+    private Product getProduct(Long id) {
+
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product", id));
+    }
+
+
+    private Supplier getSupplier(Long id) {
+
+        return supplierRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Supplier", id));
     }
 }

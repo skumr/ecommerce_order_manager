@@ -18,5 +18,4 @@ public class AddressDto {
     private String postalCode;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sudarshan.kumar.sb_poc_2.models.Product;
+import com.sudarshan.kumar.sb_poc_2.dto.ProductDto;
 import com.sudarshan.kumar.sb_poc_2.service.ProductService;
 
 @RestController
@@ -29,34 +29,42 @@ public class ProductController {
         this.productService = productService;
     }
 
+
     @GetMapping("/allproducts")
-    public List<Product> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
 
+
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public ProductDto getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
+
     @GetMapping("/name/{name}")
-    public Product getProductByName(@PathVariable String name) {
+    public ProductDto getProductByName(@PathVariable String name) {
         return productService.getProductByName(name);
     }
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ProductDto createProduct(
+            @RequestBody ProductDto productDto) {
+
+        return productService.createProduct(productDto);
     }
+
 
     @PutMapping("/{id}")
-    public Product updateProduct(
+    public ProductDto updateProduct(
             @PathVariable Long id,
-            @RequestBody Product product) {
+            @RequestBody ProductDto productDto) {
 
-        return productService.updateProduct(id, product);
+        return productService.updateProduct(id, productDto);
     }
+
 
     @PatchMapping("/{id}/price")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -67,6 +75,7 @@ public class ProductController {
         productService.changePrice(id, price);
     }
 
+
     @PatchMapping("/{id}/inventory/reduce")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void reduceInventory(
@@ -75,6 +84,7 @@ public class ProductController {
 
         productService.reduceInventory(id, quantity);
     }
+
 
     @PatchMapping("/{id}/inventory/increase")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -85,9 +95,11 @@ public class ProductController {
         productService.increaseInventory(id, quantity);
     }
 
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
+
         productService.deleteProduct(id);
     }
 }

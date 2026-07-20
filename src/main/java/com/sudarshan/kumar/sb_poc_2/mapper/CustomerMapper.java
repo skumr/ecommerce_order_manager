@@ -1,7 +1,9 @@
 package com.sudarshan.kumar.sb_poc_2.mapper;
 
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.sudarshan.kumar.sb_poc_2.dto.AddressDto;
 import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
@@ -11,15 +13,19 @@ import com.sudarshan.kumar.sb_poc_2.models.CustomerAddress;
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
-    @Mapping(target = "addresses", source = "addresses")
-    CustomerDto toDto(Customer customer);
-
+    // This is mapping a CustomerAddress object to the addressDto -- dont link the customer field
     @Mapping(target = "customer", ignore = true)
     AddressDto toDto(CustomerAddress address);
 
-    @Mapping(target = "addresses", source = "addresses")
+    CustomerAddress toEntity(AddressDto dto);
+
+    CustomerDto toDto(Customer customer);
+
     Customer toEntity(CustomerDto customerDto);
 
-    @Mapping(target = "customer", ignore = true)
-    CustomerAddress toEntity(AddressDto dto);
+    @AfterMapping
+    default void linkAddresses(@MappingTarget Customer customer) {
+        customer.getAddresses()
+                .forEach(address -> address.setCustomer(customer));
+    }
 }
