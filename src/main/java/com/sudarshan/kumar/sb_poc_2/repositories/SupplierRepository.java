@@ -1,5 +1,6 @@
 package com.sudarshan.kumar.sb_poc_2.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,15 +9,17 @@ import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
-    Optional<Supplier> findByName(String name);
+    List<Supplier> findByNameIgnoreCase(String name);
 
-    Optional<Supplier> findByEmail(String email);
+    Optional<Supplier> findByEmailIgnoreCase(String email);
 
-    Optional<Supplier> findByAccountManager(String accountManager);
+    Optional<Supplier> findByAccountManagerIgnoreCase(String accountManager);
 
-    Optional<Supplier> findByPointOfContact(String pointOfContact);
+    Optional<Supplier> findByPointOfContactIgnoreCase(String pointOfContact);
+    
+    List<Supplier> findByProducts_NameIgnoreCase(String productName);
+    
+    boolean existsByNameIgnoreCase(String name);
 
-    boolean existsByName(String name);
-
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
 }

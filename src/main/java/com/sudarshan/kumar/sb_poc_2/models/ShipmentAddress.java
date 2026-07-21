@@ -8,17 +8,15 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "shipment_address")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
+@ToString(onlyExplicitlyIncluded=true)
+@EqualsAndHashCode(callSuper=true)
 @SoftDelete(strategy = SoftDeleteType.DELETED)
 public class ShipmentAddress extends BaseAddress {
 

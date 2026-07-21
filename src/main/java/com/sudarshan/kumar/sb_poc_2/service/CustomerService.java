@@ -40,16 +40,13 @@ public class CustomerService {
 
     public List<CustomerDto> getCustomersByName(String name) {
 
-        List<Customer> customers =
-                customerRepository.findByNameContainingIgnoreCase(name);
+        List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name);
 
         if (customers.isEmpty()) {
             throw new ResourceNotFoundException("Customer", name);
         }
 
-        return customers.stream()
-                .map(customerMapper::toDto)
-                .toList();
+        return customers.stream().map(customerMapper::toDto).toList();
     }
 
     public CustomerDto getCustomerByEmail(String email) {
@@ -65,9 +62,7 @@ public class CustomerService {
 
         Customer customer = customerMapper.toEntity(customerDto);
 
-        Customer savedCustomer = customerRepository.save(customer);
-
-        return customerMapper.toDto(savedCustomer);
+        return customerMapper.toDto(customer);
     }
 
     @Transactional
@@ -75,7 +70,6 @@ public class CustomerService {
             Long id,
             CustomerDto updatedCustomerDto
     ) {
-
         Customer customer = getCustomer(id);
 
         customer.setName(updatedCustomerDto.getName());
@@ -86,12 +80,10 @@ public class CustomerService {
 
     @Transactional
     public void deleteCustomer(Long id) {
-
         customerRepository.delete(getCustomer(id));
     }
 
     private Customer getCustomer(Long id) {
-
         return customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
     }
