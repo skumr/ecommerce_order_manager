@@ -10,17 +10,17 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "customer_address")
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@ToString(onlyExplicitlyIncluded=true)
+@EqualsAndHashCode(callSuper=true)
 @SoftDelete(strategy = SoftDeleteType.DELETED)
 public class CustomerAddress extends BaseAddress {
 

@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sudarshan.kumar.sb_poc_2.dto.SupplierDto;
+import com.sudarshan.kumar.sb_poc_2.dto.supplier.CreateSupplierRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.supplier.SupplierResponseDto;
+import com.sudarshan.kumar.sb_poc_2.dto.supplier.UpdateSupplierRequestDto;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
 import com.sudarshan.kumar.sb_poc_2.mapper.SupplierMapper;
 import com.sudarshan.kumar.sb_poc_2.models.Supplier;
@@ -26,18 +28,18 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    public List<SupplierDto> getAllSuppliers() {
+    public List<SupplierResponseDto> getAllSuppliers() {
         return supplierRepository.findAll()
                 .stream()
                 .map(supplierMapper::toDto)
                 .toList();
     }
 
-    public SupplierDto getSupplierById(Long id) {
+    public SupplierResponseDto getSupplierById(Long id) {
         return supplierMapper.toDto(getSupplier(id));
     }
 
-    public List<SupplierDto> getSuppliersByName(String name) {
+    public List<SupplierResponseDto> getSuppliersByName(String name) {
         List<Supplier> suppliers = supplierRepository.findByNameIgnoreCase(name);
 
         if (suppliers.isEmpty()) {
@@ -47,7 +49,7 @@ public class SupplierService {
         return suppliers.stream().map(supplierMapper::toDto).toList();
     }
 
-    public List<SupplierDto> getSupplierByProductName(String productName) {
+    public List<SupplierResponseDto> getSupplierByProductName(String productName) {
         if (productName == null || productName.isBlank()) {
             throw new ResourceNotFoundException("Supplier", productName);
         }
@@ -59,14 +61,14 @@ public class SupplierService {
     }
 
     @Transactional
-    public SupplierDto createSupplier(SupplierDto supplierDto) {
+    public SupplierResponseDto createSupplier(CreateSupplierRequestDto supplierDto) {
         Supplier supplier = supplierMapper.toEntity(supplierDto);
 
         return supplierMapper.toDto(supplier);
     }
 
     @Transactional
-    public SupplierDto updateSupplier(Long id, SupplierDto updatedSupplierDto) {
+    public SupplierResponseDto updateSupplier(Long id, UpdateSupplierRequestDto updatedSupplierDto) {
         Supplier currSupplier = getSupplier(id);
 
         currSupplier.setName(updatedSupplierDto.getName());
@@ -76,7 +78,7 @@ public class SupplierService {
     }
 
     @Transactional
-    public void deleteOrder(Long id) {
+    public void deleteSupplier(Long id) {
         supplierRepository.delete(getSupplier(id));
     }
 
@@ -84,6 +86,4 @@ public class SupplierService {
         return supplierRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier", id));
     }
-
-
 }

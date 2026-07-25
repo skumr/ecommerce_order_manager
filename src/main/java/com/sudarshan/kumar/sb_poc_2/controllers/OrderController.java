@@ -18,6 +18,8 @@ import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.models.Order;
 import com.sudarshan.kumar.sb_poc_2.service.OrderService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/orders")
@@ -46,7 +48,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Order createOrder(@RequestBody Order order) {
+    public Order createOrder(@Valid @RequestBody Order order) {
         return orderService.createOrder(order);
     }
 
@@ -54,7 +56,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Order updateOrder(
         @PathVariable Long id,
-        @RequestBody Order order
+        @Valid @RequestBody Order order
     ) {
         return orderService.updateOrder(id, order);
     }

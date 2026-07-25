@@ -5,8 +5,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.sudarshan.kumar.sb_poc_2.dto.AddressDto;
-import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
+import com.sudarshan.kumar.sb_poc_2.dto.AddressResponseDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CreateCustomerRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CustomerResponseDto;
 import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.models.CustomerAddress;
 
@@ -15,13 +16,13 @@ public interface CustomerMapper {
 
     // This is mapping a CustomerAddress object to the addressDto -- dont link the customer field
     @Mapping(target = "customer", ignore = true)
-    AddressDto toDto(CustomerAddress address);
+    AddressResponseDto toDto(CustomerAddress address);
 
-    CustomerAddress toEntity(AddressDto dto);
+    CustomerAddress toEntity(AddressResponseDto dto);
 
-    CustomerDto toDto(Customer customer);
+    CustomerResponseDto toDto(Customer customer);
 
-    Customer toEntity(CustomerDto customerDto);
+    Customer toEntity(CreateCustomerRequestDto customerDto);
 
     @AfterMapping
     default void linkAddresses(@MappingTarget Customer customer) {

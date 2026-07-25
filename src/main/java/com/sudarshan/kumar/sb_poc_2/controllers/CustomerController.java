@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CreateCustomerRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CustomerResponseDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.UpdateCustomerRequestDto;
 import com.sudarshan.kumar.sb_poc_2.service.CustomerService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -28,26 +32,26 @@ public class CustomerController {
     }
 
     @GetMapping("/all")
-    public List<CustomerDto> getAllCustomers() {
+    public List<CustomerResponseDto> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public CustomerDto getCustomerById(
+    public CustomerResponseDto getCustomerById(
             @PathVariable Long id
     ) {
         return customerService.getCustomerById(id);
     }
 
     @GetMapping("/search/{name}")
-    public List<CustomerDto> getCustomersByName(
+    public List<CustomerResponseDto> getCustomersByName(
             @PathVariable String name
     ) {
         return customerService.getCustomersByName(name);
     }
 
     @GetMapping("/email")
-    public CustomerDto getCustomerByEmail(
+    public CustomerResponseDto getCustomerByEmail(
             @RequestParam String email
     ) {
         return customerService.getCustomerByEmail(email);
@@ -55,16 +59,16 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDto createCustomer(
-            @RequestBody CustomerDto customerDto
+    public CustomerResponseDto createCustomer(
+            @Valid @RequestBody CreateCustomerRequestDto customerDto
     ) {
         return customerService.createCustomer(customerDto);
     }
 
     @PutMapping("/{id}")
-    public CustomerDto updateCustomer(
+    public CustomerResponseDto updateCustomer(
             @PathVariable Long id,
-            @RequestBody CustomerDto customerDto
+            @Valid @RequestBody UpdateCustomerRequestDto customerDto
     ) {
         return customerService.updateCustomer(id, customerDto);
     }

@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sudarshan.kumar.sb_poc_2.dto.CustomerDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CreateCustomerRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.CustomerResponseDto;
+import com.sudarshan.kumar.sb_poc_2.dto.customer.UpdateCustomerRequestDto;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
 import com.sudarshan.kumar.sb_poc_2.mapper.CustomerMapper;
 import com.sudarshan.kumar.sb_poc_2.models.Customer;
@@ -26,7 +28,7 @@ public class CustomerService {
         this.customerMapper = customerMapper;
     }
 
-    public List<CustomerDto> getAllCustomers() {
+    public List<CustomerResponseDto> getAllCustomers() {
 
         return customerRepository.findAll()
                 .stream()
@@ -34,11 +36,11 @@ public class CustomerService {
                 .toList();
     }
 
-    public CustomerDto getCustomerById(Long id) {
+    public CustomerResponseDto getCustomerById(Long id) {
         return customerMapper.toDto(getCustomer(id));
     }
 
-    public List<CustomerDto> getCustomersByName(String name) {
+    public List<CustomerResponseDto> getCustomersByName(String name) {
 
         List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name);
 
@@ -49,7 +51,7 @@ public class CustomerService {
         return customers.stream().map(customerMapper::toDto).toList();
     }
 
-    public CustomerDto getCustomerByEmail(String email) {
+    public CustomerResponseDto getCustomerByEmail(String email) {
 
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", email));
@@ -58,7 +60,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDto createCustomer(CustomerDto customerDto) {
+    public CustomerResponseDto createCustomer(CreateCustomerRequestDto customerDto) {
 
         Customer customer = customerMapper.toEntity(customerDto);
 
@@ -66,14 +68,14 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDto updateCustomer(
-            Long id,
-            CustomerDto updatedCustomerDto
+    public CustomerResponseDto updateCustomer(
+            Long id, 
+            UpdateCustomerRequestDto customerDto
     ) {
         Customer customer = getCustomer(id);
 
-        customer.setName(updatedCustomerDto.getName());
-        customer.setEmail(updatedCustomerDto.getEmail());
+        customer.setName(customerDto.getName());
+        customer.setEmail(customerDto.getEmail());
 
         return customerMapper.toDto(customer);
     }

@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sudarshan.kumar.sb_poc_2.dto.ProductDto;
+import com.sudarshan.kumar.sb_poc_2.dto.product.CreateProductRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.product.ProductResponseDto;
+import com.sudarshan.kumar.sb_poc_2.dto.product.UpdateProductRequestDto;
 import com.sudarshan.kumar.sb_poc_2.exceptions.InsufficientResourceException;
 import com.sudarshan.kumar.sb_poc_2.exceptions.ResourceNotFoundException;
 import com.sudarshan.kumar.sb_poc_2.mapper.ProductMapper;
@@ -34,7 +36,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getAllProducts() {
+    public List<ProductResponseDto> getAllProducts() {
 
         return productRepository.findAll()
                 .stream()
@@ -43,13 +45,13 @@ public class ProductService {
     }
 
 
-    public ProductDto getProductById(Long id) {
+    public ProductResponseDto getProductById(Long id) {
 
         return productMapper.toDto(getProduct(id));
     }
 
 
-    public ProductDto getProductByName(String name) {
+    public ProductResponseDto getProductByName(String name) {
 
         Product product = productRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() ->
@@ -59,7 +61,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsBySupplier(Supplier supplier) {
+    public List<ProductResponseDto> getProductsBySupplier(Supplier supplier) {
 
         List<Product> products =
                 productRepository.findBySupplier(supplier);
@@ -74,7 +76,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsAbovePrice(BigDecimal price) {
+    public List<ProductResponseDto> getProductsAbovePrice(BigDecimal price) {
 
         return productRepository.findByPriceGreaterThan(price)
                 .stream()
@@ -83,7 +85,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsBelowPrice(BigDecimal price) {
+    public List<ProductResponseDto> getProductsBelowPrice(BigDecimal price) {
 
         return productRepository.findByPriceLessThan(price)
                 .stream()
@@ -92,7 +94,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsWithinPriceRange(
+    public List<ProductResponseDto> getProductsWithinPriceRange(
             BigDecimal minPrice,
             BigDecimal maxPrice) {
 
@@ -103,7 +105,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getLowStockProducts(int threshold) {
+    public List<ProductResponseDto> getLowStockProducts(int threshold) {
 
         return productRepository.findByQuantityLessThan(threshold)
                 .stream()
@@ -112,7 +114,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsInStock(int minimumQuantity) {
+    public List<ProductResponseDto> getProductsInStock(int minimumQuantity) {
 
         return productRepository.findByQuantityGreaterThan(minimumQuantity)
                 .stream()
@@ -121,7 +123,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getSupplierInventory(
+    public List<ProductResponseDto> getSupplierInventory(
             Supplier supplier,
             int minimumQuantity) {
 
@@ -134,7 +136,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> searchProducts(String keyword) {
+    public List<ProductResponseDto> searchProducts(String keyword) {
 
         List<Product> products =
                 productRepository.findByNameContainingIgnoreCase(keyword);
@@ -149,7 +151,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsStartingWith(String prefix) {
+    public List<ProductResponseDto> getProductsStartingWith(String prefix) {
 
         return productRepository.findByNameStartingWithIgnoreCase(prefix)
                 .stream()
@@ -158,7 +160,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsByLowestPrice() {
+    public List<ProductResponseDto> getProductsByLowestPrice() {
 
         return productRepository.findByOrderByPriceAsc()
                 .stream()
@@ -167,7 +169,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsByHighestPrice() {
+    public List<ProductResponseDto> getProductsByHighestPrice() {
 
         return productRepository.findByOrderByPriceDesc()
                 .stream()
@@ -176,7 +178,7 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsByInventory() {
+    public List<ProductResponseDto> getProductsByInventory() {
 
         return productRepository.findByOrderByQuantityDesc()
                 .stream()
@@ -186,7 +188,7 @@ public class ProductService {
 
 
     @Transactional
-    public ProductDto createProduct(ProductDto productDto) {
+    public ProductResponseDto createProduct(CreateProductRequestDto productDto) {
 
         if (productRepository.existsByNameIgnoreCase(productDto.getName())) {
             throw new IllegalArgumentException(
@@ -200,8 +202,7 @@ public class ProductService {
         if (productDto.getSupplier() != null) {
 
             Supplier supplier = getSupplier(
-                    productDto.getSupplier().getId()
-            );
+                    productDto.getSupplierId());
 
             product.setSupplier(supplier);
         }
@@ -213,24 +214,15 @@ public class ProductService {
 
 
     @Transactional
-    public ProductDto updateProduct(
+    public ProductResponseDto updateProduct(
             Long id,
-            ProductDto updatedProductDto) {
+            UpdateProductRequestDto updatedProductDto) {
 
         Product product = getProduct(id);
 
         product.setName(updatedProductDto.getName());
         product.setPrice(updatedProductDto.getPrice());
         product.setQuantity(updatedProductDto.getQuantity());
-
-        if (updatedProductDto.getSupplier() != null) {
-
-            Supplier supplier = getSupplier(
-                    updatedProductDto.getSupplier().getId()
-            );
-
-            product.setSupplier(supplier);
-        }
 
         return productMapper.toDto(product);
     }

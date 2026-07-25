@@ -11,11 +11,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name = "supplier_address")
 @Data
+@NoArgsConstructor
 @ToString(onlyExplicitlyIncluded=true)
 @EqualsAndHashCode(callSuper=true)
 @SoftDelete(strategy = SoftDeleteType.DELETED)

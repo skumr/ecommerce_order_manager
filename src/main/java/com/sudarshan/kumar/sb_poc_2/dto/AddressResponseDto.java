@@ -1,13 +1,12 @@
 package com.sudarshan.kumar.sb_poc_2.dto;
 
-import java.time.LocalDateTime;
-
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
+import lombok.NoArgsConstructor;
 
 @Data
-@SuperBuilder
-public class AddressDto {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class AddressResponseDto {
 
     private Long id;
     private String unit;
@@ -15,7 +14,5 @@ public class AddressDto {
     private String city;
     private String province;
     private String country;
-    private String postalCode;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private String postalCode;    
 }

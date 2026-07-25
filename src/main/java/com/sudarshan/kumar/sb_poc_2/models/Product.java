@@ -13,11 +13,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name = "products")
 @Data
+@NoArgsConstructor
 @ToString(onlyExplicitlyIncluded=true)
 @EqualsAndHashCode(callSuper=true)
 public class Product extends BaseEntity {

@@ -17,11 +17,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name = "customers")
 @Data
+@NoArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(callSuper=true)
 @SoftDelete(strategy = SoftDeleteType.DELETED)
@@ -58,8 +60,16 @@ public class Customer extends BaseEntity {
         address.setCustomer(this);
     }
 
+    public void removeAddress(CustomerAddress address) {
+        addresses.remove(address);
+    }
+
     public void addOrder(Order order) {
         orders.add(order);
         order.setCustomer(this);
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
     }
 }

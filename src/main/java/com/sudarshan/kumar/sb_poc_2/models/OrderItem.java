@@ -13,17 +13,15 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "item_orders")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
+@ToString(onlyExplicitlyIncluded=true)
+@EqualsAndHashCode(callSuper=true)
 @SoftDelete(strategy = SoftDeleteType.DELETED)
 public class OrderItem extends BaseEntity {
 
