@@ -3,6 +3,9 @@ package com.sudarshan.kumar.sb_poc_2.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,24 +20,22 @@ import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 import com.sudarshan.kumar.sb_poc_2.repositories.ProductRepository;
 import com.sudarshan.kumar.sb_poc_2.repositories.SupplierRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final SupplierRepository supplierRepository;
     private final ProductMapper productMapper;
 
-    public ProductService(
-            ProductRepository productRepository,
-            SupplierRepository supplierRepository,
-            ProductMapper productMapper
-    ) {
-        this.productRepository = productRepository;
-        this.supplierRepository = supplierRepository;
-        this.productMapper = productMapper;
-    }
+    public Page<ProductResponseDto> getPaginatedProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAll(pageable).map(productMapper::toDto);
 
+    }
 
     public List<ProductResponseDto> getAllProducts() {
 
