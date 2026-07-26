@@ -18,11 +18,18 @@ public interface SupplierMapper {
 
     SupplierResponseDto toDto(Supplier supplier);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "products", ignore = true)
     Supplier toEntity(CreateSupplierRequestDto dto);
 
-    @Mapping(target = "supplier", ignore = true)
     AddressResponseDto toDto(SupplierAddress address);
 
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "supplier", ignore = true)
     SupplierAddress toEntity(AddressResponseDto dto);
 
     @Mapping(target = "supplier", ignore = true)

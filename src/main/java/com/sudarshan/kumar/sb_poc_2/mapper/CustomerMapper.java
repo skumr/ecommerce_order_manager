@@ -14,19 +14,26 @@ import com.sudarshan.kumar.sb_poc_2.models.CustomerAddress;
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
-    // This is mapping a CustomerAddress object to the addressDto -- dont link the customer field
-    @Mapping(target = "customer", ignore = true)
     AddressResponseDto toDto(CustomerAddress address);
 
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "customer", ignore = true)
     CustomerAddress toEntity(AddressResponseDto dto);
 
     CustomerResponseDto toDto(Customer customer);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Customer toEntity(CreateCustomerRequestDto customerDto);
 
     @AfterMapping
     default void linkAddresses(@MappingTarget Customer customer) {
-        customer.getAddresses()
-                .forEach(address -> address.setCustomer(customer));
+        if (customer.getAddresses() != null) {
+            customer.getAddresses()
+                    .forEach(address -> address.setCustomer(customer));
+        }
     }
 }
