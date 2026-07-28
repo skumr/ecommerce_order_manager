@@ -13,20 +13,15 @@ import com.sudarshan.kumar.sb_poc_2.mapper.SupplierMapper;
 import com.sudarshan.kumar.sb_poc_2.models.Supplier;
 import com.sudarshan.kumar.sb_poc_2.repositories.SupplierRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional(readOnly=true)
+@RequiredArgsConstructor
 public class SupplierService {
     
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
-
-    public SupplierService(
-        SupplierRepository supplierRepository,
-        SupplierMapper supplierMapper
-    ) {
-        this.supplierMapper = supplierMapper;
-        this.supplierRepository = supplierRepository;
-    }
 
     public List<SupplierResponseDto> getAllSuppliers() {
         return supplierRepository.findAll()

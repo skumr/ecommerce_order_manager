@@ -1,7 +1,5 @@
 package com.sudarshan.kumar.sb_poc_2.dto.order;
 
-import java.util.List;
-
 import com.sudarshan.kumar.sb_poc_2.dto.customer.CustomerResponseDto;
 
 import lombok.AccessLevel;
@@ -12,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 public class CreateOrderRequestDto {
 
-    private List<OrderItemResponseDto> orderItems;
     private CustomerResponseDto customer;
     
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sudarshan.kumar.sb_poc_2.dto.order.CreateOrderRequestDto;
+import com.sudarshan.kumar.sb_poc_2.dto.order.OrderResponseDto;
 import com.sudarshan.kumar.sb_poc_2.models.Customer;
 import com.sudarshan.kumar.sb_poc_2.models.Order;
 import com.sudarshan.kumar.sb_poc_2.service.OrderService;
@@ -32,7 +34,7 @@ public class OrderController {
     }
 
     @GetMapping("/allorders")
-    public List<Order> getAllOrders() {
+    public List<OrderResponseDto> getAllOrders() {
         return orderService.getAllOrders();
     }
     
@@ -48,7 +50,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Order createOrder(@Valid @RequestBody Order order) {
+    public OrderResponseDto createOrder(@Valid @RequestBody CreateOrderRequestDto order) {
         return orderService.createOrder(order);
     }
 
